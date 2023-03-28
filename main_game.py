@@ -1,6 +1,6 @@
 from bag import Bag
 from players import Player
-from board import ScrabbleBoard
+from board import Board
 
 def create_players():
     player_list = []
@@ -12,18 +12,41 @@ def create_players():
         player.name = input_name
         player_list.append(player)
     return player_list        
-        
+
+def options(board, bag):
+    print("CHOOSE MOVE")
+    print("1. Play a word")
+    print("2. Swap letters")
+    print("3. Pass your turn")
+    opt = input("CHOOSE MOVE: ")
+    if opt == "1":
+        pos = input("Position: ")
+        direction = input("Horizontal or Vertical (h/v): ")
+        word = input("Word: ")
+        board.place_letters()
+    if opt == "2":
+        pass
+    if opt == "3":
+        pass
+
 
 def main():
     #make players
     player_list = create_players()
     #make bag
     bag = Bag()
+    #make board
+    board = Board()
+
     end = True
     while end == True:
         for player in player_list:
             #draw letters
             bag.draw_letters(player.hand)
+            #print board
+            print(board)
+            options(board, bag)
+            
 
 
 
