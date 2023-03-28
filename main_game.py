@@ -1,6 +1,7 @@
 from bag import Bag
 from players import Player
 from board import Board
+from score import Score
 
 def create_players():
     player_list = []
@@ -35,10 +36,6 @@ def options(board, bag, player, pass_counter):
 
             #returns score if possible otherwise error
             answer = board.place_letters(player, word, start_col, start_row, direction)
-            
-            #if answer is score
-            if isinstance(answer, int):
-                break
 
             if answer is not None:
                 print(answer)
