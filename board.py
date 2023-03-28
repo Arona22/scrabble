@@ -94,7 +94,7 @@ class Board:
         return return_string
     
 
-board = Board()
-print(board)
-board.place_letters(["A", "B", "C", "D", "E", "F", "G"], "GIRAFFE", "F8", "H")
-print(board)
+# board = Board()
+# print(board)
+# board.place_letters(["A", "B", "C", "D", "E", "F", "G"], "GIRAFFE", "F8", "H")
+# print(board)
