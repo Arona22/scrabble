@@ -23,16 +23,18 @@ def options(board, bag, player, pass_counter):
 
     if opt == "1":
         turn = True
-        while turn is not None or turn != "Word is not in dictionary. Turn forfeited":
+        while turn is not None and turn != "Word is not in dictionary. Turn forfeited":
+            word = input("Word: ").upper()
             pos = input("Position to place from: ").upper()
             direction = input("Horizontal or Vertical (h/v): ").upper()
-            word = input("Word: ").upper()
 
             turn = board.place_letters(player.hand, word, pos, direction)
             if turn is not None:
                 print(turn)
 
-
+        #take out letters used
+        bag.swap(player.hand, word)
+        
         pass_counter = 0
         return pass_counter
 
