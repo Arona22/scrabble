@@ -1,8 +1,11 @@
+from bag import Bag
+
 class Board:
     def __init__(self) -> None:
         self.size = 15
         self.board = [[None] * self.size for _ in range(self.size)]
         self.board_constants = ["DL", "DW", "TL", "TW", "#"]
+        self.points_for_letter = Bag().points_for_letter
         self._add_constants()
 
     def _add_constants(self):
@@ -57,9 +60,9 @@ class Board:
         used_letters = []
 
         if self.board[7][7] == "#":
-            if direction == "H" and (start_row != 7 or start_col + len(word) < 7):
+            if direction == "H" and (start_row != 7 or start_col + len(word) <= 7):
                 return "First word of game must be on the '#'"
-            if direction == "V" and (start_col != 7 or start_row + len(word) < 7):
+            if direction == "V" and (start_col != 7 or start_row + len(word) <= 7):
                 return "First word of game must be on the '#'"
             
         for i in range(len(word)):
@@ -74,9 +77,8 @@ class Board:
                 else:
                     used_letters.append(word[i])
             
-            if curr_pos is not None:
-                if curr_pos not in self.board_constants and curr_pos != f"{word[i]}({self.points_for_letter[word[i]]})":
-                    return "Word does not fit in chosen position, try again!"
+            if curr_pos is not None and curr_pos not in self.board_constants and curr_pos != f"{word[i]}({self.points_for_letter[word[i]]})":
+                return "Word does not fit in chosen position, try again!"
         
         invalid_word = True 
         dictionary = self.open_dict()
@@ -90,12 +92,12 @@ class Board:
         
         for i in range(len(word)):
             if direction == "H":
-                self.board[start_row][start_col + i] = player.find_item_in_hand(word[i])
+                self.board[start_row][start_col + i] = f"{word[i]}({self.points_for_letter[word[i]]})"
             else:
-                self.board[start_row + i][start_col] = player.find_item_in_hand(word[i])
+                self.board[start_row + i][start_col] = f"{word[i]}({self.points_for_letter[word[i]]})"
 
         for letter in used_letters:
-            player.remove(letter)
+            player.delete_item_in_hand(letter)
 
     def calculate_score(self, letter_pos, direction):
         pass
@@ -114,11 +116,3 @@ class Board:
             return_string += "\n" + "    " + "-" * 105 + "\n"
             counter += 1
         return return_string
-    
-board = Board()
-print(board.place_letters(['Q(2)', 'K(4)', 'E(1)', 'D(3)', 'E(4)', ' (0)', 'G(2)'], "KEY", 7, 7, "H"))
-print(board)
-# print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'I(1)', 'H(4)', 'Y(4)', 'G(2)'], "HGRYI", "H8", "V"))
-# print(board)
-# print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'E(28)', 'H(4)', 'Y(4)', 'G(2)'], "ORE", "I8", "V"))
-# print(board)
