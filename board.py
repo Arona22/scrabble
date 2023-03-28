@@ -83,13 +83,13 @@ class Board:
                         if self.board[start_row + i][start_col] != f"{word[i]}({self.points_for_letter[word[i]]})":
                             return "Word does not fit in chosen position, try again!"
         
-        valid_word = False 
+        invalid_word = True 
         for line in self.dictionary:
-            if line[0] == word:
-                valid_word = True
+            if line.split("\t")[0] == word:
+                invalid_word = False
         
-        if valid_word:
-            return "Word is not in dictionary. Turn forfeited"
+        if invalid_word:
+            return f"{word} is not in dictionary. Turn forfeited"
 
         for i in range(len(word)):
             if direction == "H":
@@ -114,3 +114,9 @@ class Board:
             return_string += "\n" + "    " + "-" * 105 + "\n"
             counter += 1
         return return_string
+    
+board = Board()
+print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'I(1)', 'H(4)', 'Y(4)', 'G(2)'], "DOG", "H8", "V"))
+print(board)
+print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'I(1)', 'H(4)', 'Y(4)', 'G(2)'], "HGRYI", "H8", "H"))
+print(board)
