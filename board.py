@@ -65,4 +65,4 @@ class Board:
         return return_string
 
 
-print(ScrabbleBoard())
+print(Board())
