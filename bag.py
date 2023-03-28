@@ -6,15 +6,14 @@ class Bag:
     
     def draw_letters(self, hand):
         ''' Draw so that you have 7 letters on hand '''
-        for _ in range(6):
+        for _ in range(7):
             letter = random.choice(self.letters_in_bag)
             if len(hand) < 7:
                 hand.append(f"{letter}({self.points_for_letter[letter]})")
                 self.letters_in_bag.remove(letter)
-        return hand
 
 
-hand = []
-l = Bag()
-hand = l.draw_letters(hand)
+# hand = ['O(1)', 'E(1)',]
+# l = Bag()
+# l.draw_letters(hand)
 # print(hand)

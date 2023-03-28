@@ -1,5 +1,6 @@
 from bag import Bag
 from players import Player
+from board import ScrabbleBoard
 
 def create_players():
     player_list = []
@@ -22,8 +23,8 @@ def main():
     while end == True:
         for player in player_list:
             #draw letters
-            player.hand = bag.draw_letters(player.hand)
-        print()
+            bag.draw_letters(player.hand)
+
 
 
 
