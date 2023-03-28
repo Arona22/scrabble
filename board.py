@@ -66,17 +66,22 @@ class Board:
             
         for i in range(len(word)):
             if direction == "H":
-                curr_pos = self.board[start_row][start_col + i]
+                if word[i] not in hand and (self.board[start_row][start_col + i] is None or self.board[start_row][start_col + i] in self.board_constants):
+                    return "You do not have the right letters for this word, try again!"
+                
+                if self.board[start_row][start_col + i] is not None:
+                    if self.board[start_row][start_col + i] not in self.board_constants:
+                        if self.board[start_row][start_col + i] != f"{word[i]}({self.points_for_letter[word[i]]})":
+                            return "Word does not fit in chosen position, try again!"
+                        
             elif direction == "V":
-                curr_pos = self.board[start_row + i][start_col]
-
-            if word[i] not in hand and (curr_pos is None or curr_pos in self.board_constants):
-                return "You do not have the right letters for this word, try again!"
-            
-            if curr_pos is not None:
-                if curr_pos not in self.board_constants:
-                    if curr_pos != f"{word[i]}({self.points_for_letter[word[i]]})":
-                        return "Word does not fit in chosen position, try again!"
+                if word[i] not in hand and (self.board[start_row + i][start_col] is None or self.board[start_row + i][start_col] in self.board_constants):
+                    return "You do not have the right letters for this word, try again!"
+                
+                if self.board[start_row + i][start_col] is not None:
+                    if self.board[start_row + i][start_col] not in self.board_constants:
+                        if self.board[start_row + i][start_col] != f"{word[i]}({self.points_for_letter[word[i]]})":
+                            return "Word does not fit in chosen position, try again!"
         
         invalid_word = False 
         for line in self.dictionary:
