@@ -114,7 +114,3 @@ class Board:
             return_string += "\n" + "    " + "-" * 105 + "\n"
             counter += 1
         return return_string
-    
-board = Board()
-print(board.place_letters(['A(1)', 'I(1)', 'A(1)', 'L(1)', 'C(3)', 'I(1)', 'J(8)'], "JAIL", "H8", "V"))
-print(board)
