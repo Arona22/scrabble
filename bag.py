@@ -12,6 +12,14 @@ class Bag:
                 hand.append(f"{letter}({self.points_for_letter[letter]})")
                 self.letters_in_bag.remove(letter)
 
+    def swap(self, hand, let):
+        for i in let:
+            for j in hand:
+                if j[0] == i:
+                    hand.remove(j)
+                    self.letters_in_bag.append(i)
+        self.draw_letters(hand)
+
 
 # hand = ['O(1)', 'E(1)',]
 # l = Bag()

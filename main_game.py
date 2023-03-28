@@ -13,21 +13,25 @@ def create_players():
         player_list.append(player)
     return player_list        
 
-def options(board, bag):
-    print("CHOOSE MOVE")
+def options(board, bag, player):
+    print(f"{player.name}'s turn!")
     print("1. Play a word")
     print("2. Swap letters")
     print("3. Pass your turn")
+    player.print_hand()
     opt = input("CHOOSE MOVE: ")
     if opt == "1":
-        pos = input("Position: ")
-        direction = input("Horizontal or Vertical (h/v): ")
-        word = input("Word: ")
-        board.place_letters()
-    if opt == "2":
-        pass
-    if opt == "3":
-        pass
+        pos = input("Position: ").upper()
+        direction = input("Horizontal or Vertical (h/v): ").upper()
+        word = input("Word: ").upper()
+        board.place_letters(player.hand, word, pos, direction)
+
+    elif opt == "2":
+        let_swap = input("What letters to swap? (e.x: AFSAS) ").upper()
+        bag.swap(player.hand, let_swap)
+
+    elif opt == "3":
+        return
 
 
 def main():
@@ -45,7 +49,7 @@ def main():
             bag.draw_letters(player.hand)
             #print board
             print(board)
-            options(board, bag)
+            options(board, bag, player)
             
 
 
