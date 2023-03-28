@@ -9,14 +9,14 @@ def create_players():
         input_name = input(f"Name of player {i+1}: ")
         player.name = input_name
         player_list.append(player)
-    return player_list
-
-
-        
+    return player_list        
         
 
 def main():
     player_list = create_players()
+    for i in len(player_list):
+        pass
+
     print(player_list)
 
 
