@@ -13,25 +13,31 @@ def create_players():
         player_list.append(player)
     return player_list        
 
-def options(board, bag, player):
+def options(board, bag, player, pass_counter):
     print(f"{player.name}'s turn!")
     print("1. Play a word")
     print("2. Swap letters")
     print("3. Pass your turn")
     player.print_hand()
     opt = input("CHOOSE MOVE: ")
+
     if opt == "1":
-        pos = input("Position: ").upper()
+        pos = input("Position to place from: ").upper()
         direction = input("Horizontal or Vertical (h/v): ").upper()
         word = input("Word: ").upper()
         board.place_letters(player.hand, word, pos, direction)
+        pass_counter = 0
+        return pass_counter
 
     elif opt == "2":
         let_swap = input("What letters to swap? (e.x: AFSAS) ").upper()
         bag.swap(player.hand, let_swap)
+        pass_counter = 0
+        return pass_counter
 
     elif opt == "3":
-        return
+        pass_counter += 1
+        return pass_counter
 
 
 def main():
@@ -42,14 +48,25 @@ def main():
     #make board
     board = Board()
 
-    end = True
-    while end == True:
+    #how many times players have passed
+    pass_counter = 0
+    while True:
+        #if all players pass twice (more points wins)
+        if pass_counter >= 2*len(player_list):
+            print(f"Game Over! (name) has more points!")
+            break
+
         for player in player_list:
+            #if player has won
+            if bag.letters_in_bag == [] and player.hand == []:
+                print(f"Game Over! {player.name} won!")
+                return
+
             #draw letters
             bag.draw_letters(player.hand)
             #print board
             print(board)
-            options(board, bag, player)
+            pass_counter = options(board, bag, player, pass_counter)
             
 
 
