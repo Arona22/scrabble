@@ -4,6 +4,7 @@ class Board:
         self.board = [[None] * self.size for _ in range(self.size)]
         self._add_multicatiors()
         self.board[7][7] = "#"
+        self.words = open("Collins Scrabble Words (2019) with definitions-1.txt", "r")
 
     def _add_multicatiors(self):
         for row in range(self.size):
@@ -48,7 +49,13 @@ class Board:
         self.board[12][6] = "DL"
         self.board[12][8] = "DL"
 
-    def _calculate_score(self, word_start):
+    def place_letter(self, word, start_pos, direction):
+        for _ in self.words:
+            print(_)
+        if self.board[7][7] == "#":
+            pass
+
+    def calculate_score(self, letter_pos, direction):
         pass
 
     def __str__(self) -> str:
@@ -65,3 +72,7 @@ class Board:
             return_string += "\n" + "    " + "=" * 60 + "\n"
             counter += 1
         return return_string
+    
+
+board = Board()
+board.place_letter(1, 2, 3)
