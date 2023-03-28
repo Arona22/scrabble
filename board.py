@@ -6,7 +6,8 @@ class Board:
         self.board = [[None] * self.size for _ in range(self.size)]
         self._add_multicatiors()
         self.board[7][7] = "#"
-        self.words = open("Collins Scrabble Words (2019) with definitions-1.txt", "r")
+        self.dictionary = open("Collins Scrabble Words (2019) with definitions-1.txt", "r")
+        self.multicators = ["DL", "DW", "TL", "TW"]
         self.points_for_letter = Bag().points_for_letter
 
     def _add_multicatiors(self):
@@ -53,27 +54,39 @@ class Board:
         self.board[12][8] = "DL"
 
     def place_letters(self, hand, word, start_pos, direction):
-        start_row = ord(start_pos[0]) - 65
-        start_col = int(start_pos[1]) - 1
-        invalid_word = False
+        start_col = ord(start_pos[0]) - 65
+        start_row = int(start_pos[1]) - 1
 
         if self.board[7][7] == "#":
-            if direction == "H" and (start_row != 7 or start_col + word.len() < 7):
+            if direction == "H" and (start_row != 7 or start_col + len(word) < 7):
+                return "First word of game must be on the '#'"
+            if direction == "V" and (start_col != 7 or start_row + len(word) < 7):
+                return "First word of game must be on the '#'"
+            
+        for i in range(len(word)):
+            if direction == "H":
+                curr_pos = self.board[start_row][start_col + i]
+                if word[i] not in hand and (curr_pos is None or curr_pos in self.multicators):
+                    return "You do not have the right letters for this word, try again!"
+                
+                if curr_pos is not None:
+                    if curr_pos not in self.multicators:
+                        if curr_pos != f"{word[i]}({self.points_for_letter[word[i]]})":
+                            return "Word does not fit in chosen position, try again!"
+        
+        invalid_word = False 
+        for line in self.dictionary:
+            if line[0] == word:
                 invalid_word = True
-            if direction == "V" and (start_col != 7 or start_row + word.len() < 7):
-                invalid_word = True
+        
+        if invalid_word:
+            return "Word is not in dictionary. Turn forfeited"
 
         for i in range(len(word)):
             if direction == "H":
-                self.board[start_col][start_row + i] = f"{word[i]}({self.points_for_letter[word[i]]})"
+                self.board[start_row][start_col + i] = f"{word[i]}({self.points_for_letter[word[i]]})"
             else:
-                self.board[start_col + i][start_row] = word[i]
-
-        for line in self.words:
-            if line[0] == word:
-                invalid_word = False
-        if self.board[7][7] == "#":
-            pass
+                self.board[start_row + i][start_col] = word[i]
 
     def calculate_score(self, letter_pos, direction):
         pass
@@ -94,7 +107,7 @@ class Board:
         return return_string
     
 
-# board = Board()
-# print(board)
-# board.place_letters(["A", "B", "C", "D", "E", "F", "G"], "GIRAFFE", "F8", "H")
-# print(board)
+board = Board()
+print(board)
+board.place_letters(["A", "B", "C", "D", "E", "F", "G"], "GIRAFFE", "F8", "H")
+print(board)
