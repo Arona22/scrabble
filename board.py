@@ -49,9 +49,10 @@ class Board:
         self.board[12][6] = "DL"
         self.board[12][8] = "DL"
 
-    def place_letter(self, word, start_pos, direction):
-        for _ in self.words:
-            print(_)
+    def place_letters(self, word, start_pos, direction):
+        for line in self.words:
+            if line[0] == word:
+                pass 
         if self.board[7][7] == "#":
             pass
 
@@ -74,5 +75,5 @@ class Board:
         return return_string
     
 
-board = Board()
-board.place_letter(1, 2, 3)
+# board = Board()
+# board.place_letters(1, 2, 3)
