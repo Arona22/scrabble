@@ -9,7 +9,7 @@ class Board:
         self.board_constants = ["DL", "DW", "TL", "TW", "#"]
         self.points_for_letter = Bag().points_for_letter
 
-    def _add_multicatiors(self):
+    def _add_constants(self):
         for row in range(self.size):
             for col in range(self.size):
                 if row == col or row + col == self.size - 1:
