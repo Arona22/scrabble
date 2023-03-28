@@ -5,9 +5,11 @@ class Board:
         self.size = 15
         self.board = [[None] * self.size for _ in range(self.size)]
         self._add_constants()
-        self.dictionary = open("Collins Scrabble Words (2019) with definitions-1.txt", "r")
         self.board_constants = ["DL", "DW", "TL", "TW", "#"]
         self.points_for_letter = Bag().points_for_letter
+
+    def open_dict(self):
+        return open("Collins Scrabble Words (2019) with definitions-1.txt", "r")
 
     def _add_constants(self):
         for row in range(self.size):
@@ -84,9 +86,11 @@ class Board:
                             return "Word does not fit in chosen position, try again!"
         
         invalid_word = True 
-        for line in self.dictionary:
+        dictionary = self.open_dict()
+        for line in dictionary:
             if line.split("\t")[0] == word:
                 invalid_word = False
+        dictionary.close()
         
         if invalid_word:
             return f"{word} is not in dictionary. Turn forfeited"
@@ -115,8 +119,10 @@ class Board:
             counter += 1
         return return_string
     
-# board = Board()
-# print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'I(1)', 'H(4)', 'Y(4)', 'G(2)'], "DOG", "H8", "V"))
-# print(board)
-# print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'I(1)', 'H(4)', 'Y(4)', 'G(2)'], "HGRYI", "H8", "H"))
-# print(board)
+board = Board()
+print(board.place_letters(['Q(2)', 'U(1)', 'E(1)', 'U(1)', 'E(4)', 'Y(4)', 'G(2)'], "QUEUE", "H8", "H"))
+print(board)
+print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'I(1)', 'H(4)', 'Y(4)', 'G(2)'], "HGRYI", "H8", "V"))
+print(board)
+print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'E(28)', 'H(4)', 'Y(4)', 'G(2)'], "ORE", "I8", "V"))
+print(board)
