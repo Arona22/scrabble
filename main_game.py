@@ -15,6 +15,7 @@ def create_players():
 
 def options(board, bag, player, pass_counter):
     print(f"{player.name}'s turn!")
+    player.print_score()
     print("1. Play a word")
     print("2. Swap letters")
     print("3. Pass your turn")
@@ -22,21 +23,32 @@ def options(board, bag, player, pass_counter):
     opt = input("CHOOSE MOVE: ")
 
     if opt == "1":
-        turn = True
-        while turn is not None:
+        answer = True
+        while answer is not None:
             word = input("Word: ").upper()
             pos = input("Position to place from: ").upper()
             direction = input("Horizontal or Vertical (h/v): ").upper()
 
-            turn = board.place_letters(player.hand, word, pos, direction)
-            if turn is not None:
-                print(turn)
-            if turn == f"{word} is not in dictionary. Turn forfeited":
-                turn = None
+            #change pos=c10 to (e.x: 2,3)
+            start_col = ord(pos[0]) - 65
+            start_row = int(pos[1]) - 1
 
+            #returns score if possible otherwise error
+            answer = board.place_letters(player, word, start_col, start_row, direction)
+            
+            #if answer is score
+            if isinstance(answer, int):
+                break
 
-        #take out letters used
-        bag.swap(player.hand, word)
+            if answer is not None:
+                print(answer)
+            if answer == f"{word} is not in dictionary. Turn forfeited":
+                answer = None
+                    
+        player.score = answer
+
+        #Refill hand
+        bag.draw_letters(player.hand)
 
         pass_counter = 0
         return pass_counter
@@ -53,6 +65,7 @@ def options(board, bag, player, pass_counter):
 
 
 def main():
+    ''' Main game loop '''
     #make players
     player_list = create_players()
     #make bag
@@ -80,13 +93,6 @@ def main():
             print(board)
             pass_counter = options(board, bag, player, pass_counter)
             
-
-
-
-
-
-
-
 
 
 
