@@ -22,10 +22,17 @@ def options(board, bag, player, pass_counter):
     opt = input("CHOOSE MOVE: ")
 
     if opt == "1":
-        pos = input("Position to place from: ").upper()
-        direction = input("Horizontal or Vertical (h/v): ").upper()
-        word = input("Word: ").upper()
-        board.place_letters(player.hand, word, pos, direction)
+        turn = True
+        while turn is not None or turn != "Word is not in dictionary. Turn forfeited":
+            pos = input("Position to place from: ").upper()
+            direction = input("Horizontal or Vertical (h/v): ").upper()
+            word = input("Word: ").upper()
+
+            turn = board.place_letters(player.hand, word, pos, direction)
+            if turn is not None:
+                print(turn)
+
+
         pass_counter = 0
         return pass_counter
 
@@ -48,7 +55,7 @@ def main():
     #make board
     board = Board()
 
-    #how many times players have passed
+    #how many titurn players have passed
     pass_counter = 0
     while True:
         #if all players pass twice (more points wins)
