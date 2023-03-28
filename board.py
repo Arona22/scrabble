@@ -1,4 +1,4 @@
-class ScrabbleBoard:
+class Board:
     def __init__(self) -> None:
         self.size = 15
         self.board = [[None] * self.size for _ in range(self.size)]
@@ -63,4 +63,6 @@ class ScrabbleBoard:
             return_string += "\n" + "    " + "=" * 60 + "\n"
             counter += 1
         return return_string
-        
+
+
+print(ScrabbleBoard())
