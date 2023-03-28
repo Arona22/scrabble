@@ -1,3 +1,5 @@
+from bag import Bag
+
 class Board:
     def __init__(self) -> None:
         self.size = 15
@@ -5,6 +7,7 @@ class Board:
         self._add_multicatiors()
         self.board[7][7] = "#"
         self.words = open("Collins Scrabble Words (2019) with definitions-1.txt", "r")
+        self.points_for_letter = Bag().points_for_letter
 
     def _add_multicatiors(self):
         for row in range(self.size):
@@ -49,10 +52,26 @@ class Board:
         self.board[12][6] = "DL"
         self.board[12][8] = "DL"
 
-    def place_letters(self, word, start_pos, direction):
+    def place_letters(self, hand, word, start_pos, direction):
+        start_row = ord(start_pos[0]) - 65
+        start_col = int(start_pos[1]) - 1
+        invalid_word = False
+
+        if self.board[7][7] == "#":
+            if direction == "H" and (start_row != 7 or start_col + word.len() < 7):
+                invalid_word = True
+            if direction == "V" and (start_col != 7 or start_row + word.len() < 7):
+                invalid_word = True
+
+        for i in range(len(word)):
+            if direction == "H":
+                self.board[start_col][start_row + i] = f"{word[i]}({self.points_for_letter[word[i]]})"
+            else:
+                self.board[start_col + i][start_row] = word[i]
+
         for line in self.words:
             if line[0] == word:
-                pass 
+                invalid_word = False
         if self.board[7][7] == "#":
             pass
 
@@ -61,19 +80,21 @@ class Board:
 
     def __str__(self) -> str:
         counter = 1
-        return_string = "     A   B   C   D   E   F   G   H   I   J   K   L   M   N   O  \n"
-        return_string += "    " + "=" * 60 + "\n"
+        return_string = "       A      B      C      D      E      F      G      H      I      J      K      L      M      N      O\n"
+        return_string += "    " + "=" * 105 + "\n"
         for row in self.board:
             return_string += "{:3}|".format(counter)
             for col in row:
                 if col is None:
-                    return_string += "   |"
+                    return_string += "      |"
                 else:
-                    return_string += f"{col:>2} |"
-            return_string += "\n" + "    " + "=" * 60 + "\n"
+                    return_string += f"{col.center(6)}|"
+            return_string += "\n" + "    " + "-" * 105 + "\n"
             counter += 1
         return return_string
     
 
-# board = Board()
-# board.place_letters(1, 2, 3)
+board = Board()
+print(board)
+board.place_letters(["A", "B", "C", "D", "E", "F", "G"], "GIRAFFE", "F8", "H")
+print(board)
