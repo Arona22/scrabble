@@ -3,10 +3,11 @@ class Score:
         self.word = word
         self.special_tile = special_tile
 
-    def cal_score(self):
+    def cal_score(self, player):
         total_score = 0
         for tile in self.word:
-            total_score += int(tile[1])
+            total_score += int(tile[2])
         if self.special_tile is not None:
-            self.special_tile
+            total_score *= self.special_tile
+        player.score = total_score
             

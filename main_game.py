@@ -1,7 +1,7 @@
 from bag import Bag
 from players import Player
 from board import Board
-from score import Score
+
 
 def create_players():
     player_list = []
@@ -40,26 +40,34 @@ def options(board, bag, player, pass_counter):
             if answer is not None:
                 print(answer)
             if answer == f"{word} is not in dictionary. Turn forfeited":
-                answer = None
-                    
-        player.score = answer
+                answer = None  
 
         #Refill hand
         bag.draw_letters(player.hand)
 
         pass_counter = 0
-        return pass_counter
+        return pass_counter, word
 
     elif opt == "2":
         let_swap = input("What letters to swap? (e.x: AFSAS) ").upper()
         bag.swap(player.hand, let_swap)
         pass_counter = 0
-        return pass_counter
+        return pass_counter, None
 
     elif opt == "3":
         pass_counter += 1
-        return pass_counter
+        return pass_counter, None
 
+def cal_score(player, word, dict):
+    if word is None:
+        return
+    total_score = 0
+    for tile in word:
+        for sta in dict:
+            if tile == sta:
+                total_score += int(dict[sta])
+
+    player.score = total_score
 
 def main():
     ''' Main game loop '''
@@ -83,12 +91,15 @@ def main():
             if bag.letters_in_bag == [] and player.hand == []:
                 print(f"Game Over! {player.name} won!")
                 return
-
+            
             #draw letters
             bag.draw_letters(player.hand)
             #print board
             print(board)
-            pass_counter = options(board, bag, player, pass_counter)
+            pass_counter, word = options(board, bag, player, pass_counter)
+            cal_score(player, word, bag.points_for_letter) 
+            
+
             
 
 
