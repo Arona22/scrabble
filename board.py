@@ -54,6 +54,7 @@ class Board:
         self.board[12][8] = "DL"
 
     def place_letters(self, hand, word, start_pos, direction):
+        hand = [letter[0] for letter in hand]
         start_col = ord(start_pos[0]) - 65
         start_row = int(start_pos[1]) - 1
 
