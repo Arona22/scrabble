@@ -1,15 +1,9 @@
-from bag import Bag
-
 class Board:
     def __init__(self) -> None:
         self.size = 15
         self.board = [[None] * self.size for _ in range(self.size)]
-        self._add_constants()
         self.board_constants = ["DL", "DW", "TL", "TW", "#"]
-        self.points_for_letter = Bag().points_for_letter
-
-    def open_dict(self):
-        return open("Collins Scrabble Words (2019) with definitions-1.txt", "r")
+        self._add_constants()
 
     def _add_constants(self):
         for row in range(self.size):
@@ -55,10 +49,12 @@ class Board:
         self.board[12][8] = "DL"
         self.board[7][7] = "#"
 
-    def place_letters(self, hand, word, start_pos, direction):
-        hand = [letter[0] for letter in hand]
-        start_col = ord(start_pos[0]) - 65
-        start_row = int(start_pos[1]) - 1
+    def open_dict(self):
+        return open("Collins Scrabble Words (2019) with definitions-1.txt", "r")
+
+    def place_letters(self, player, word, start_col, start_row, direction):
+        hand_letters = [letter[0] for letter in player.hand]
+        used_letters = []
 
         if self.board[7][7] == "#":
             if direction == "H" and (start_row != 7 or start_col + len(word) < 7):
@@ -68,22 +64,19 @@ class Board:
             
         for i in range(len(word)):
             if direction == "H":
-                if word[i] not in hand and (self.board[start_row][start_col + i] is None or self.board[start_row][start_col + i] in self.board_constants):
-                    return "You do not have the right letters for this word, try again!"
-                
-                if self.board[start_row][start_col + i] is not None:
-                    if self.board[start_row][start_col + i] not in self.board_constants:
-                        if self.board[start_row][start_col + i] != f"{word[i]}({self.points_for_letter[word[i]]})":
-                            return "Word does not fit in chosen position, try again!"
-                        
+                curr_pos = self.board[start_row][start_col + i]
             elif direction == "V":
-                if word[i] not in hand and (self.board[start_row + i][start_col] is None or self.board[start_row + i][start_col] in self.board_constants):
+                curr_pos = self.board[start_row + i][start_col]
+
+            if curr_pos is None or curr_pos in self.board_constants:
+                if word[i] not in hand_letters:
                     return "You do not have the right letters for this word, try again!"
-                
-                if self.board[start_row + i][start_col] is not None:
-                    if self.board[start_row + i][start_col] not in self.board_constants:
-                        if self.board[start_row + i][start_col] != f"{word[i]}({self.points_for_letter[word[i]]})":
-                            return "Word does not fit in chosen position, try again!"
+                else:
+                    used_letters.append(word[i])
+            
+            if curr_pos is not None:
+                if curr_pos not in self.board_constants and curr_pos != f"{word[i]}({self.points_for_letter[word[i]]})":
+                    return "Word does not fit in chosen position, try again!"
         
         invalid_word = True 
         dictionary = self.open_dict()
@@ -94,12 +87,15 @@ class Board:
         
         if invalid_word:
             return f"{word} is not in dictionary. Turn forfeited"
-
+        
         for i in range(len(word)):
             if direction == "H":
-                self.board[start_row][start_col + i] = f"{word[i]}({self.points_for_letter[word[i]]})"
+                self.board[start_row][start_col + i] = player.find_item_in_hand(word[i])
             else:
-                self.board[start_row + i][start_col] = f"{word[i]}({self.points_for_letter[word[i]]})"
+                self.board[start_row + i][start_col] = player.find_item_in_hand(word[i])
+
+        for letter in used_letters:
+            player.remove(letter)
 
     def calculate_score(self, letter_pos, direction):
         pass
@@ -119,9 +115,9 @@ class Board:
             counter += 1
         return return_string
     
-# board = Board()
-# print(board.place_letters(['Q(2)', 'U(1)', 'E(1)', 'U(1)', 'E(4)', 'Y(4)', 'G(2)'], "QUEUE", "H8", "H"))
-# print(board)
+board = Board()
+print(board.place_letters(['Q(2)', 'K(4)', 'E(1)', 'D(3)', 'E(4)', ' (0)', 'G(2)'], "KEY", 7, 7, "H"))
+print(board)
 # print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'I(1)', 'H(4)', 'Y(4)', 'G(2)'], "HGRYI", "H8", "V"))
 # print(board)
 # print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'E(28)', 'H(4)', 'Y(4)', 'G(2)'], "ORE", "I8", "V"))
