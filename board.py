@@ -48,6 +48,8 @@ class Board:
         self.board[12][6] = "DL"
         self.board[12][8] = "DL"
 
+    def _calculate_score(self, word_start):
+        pass
 
     def __str__(self) -> str:
         counter = 1
@@ -63,6 +65,3 @@ class Board:
             return_string += "\n" + "    " + "=" * 60 + "\n"
             counter += 1
         return return_string
-
-
-print(Board())
