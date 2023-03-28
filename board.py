@@ -119,10 +119,10 @@ class Board:
             counter += 1
         return return_string
     
-board = Board()
-print(board.place_letters(['Q(2)', 'U(1)', 'E(1)', 'U(1)', 'E(4)', 'Y(4)', 'G(2)'], "QUEUE", "H8", "H"))
-print(board)
-print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'I(1)', 'H(4)', 'Y(4)', 'G(2)'], "HGRYI", "H8", "V"))
-print(board)
-print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'E(28)', 'H(4)', 'Y(4)', 'G(2)'], "ORE", "I8", "V"))
-print(board)
+# board = Board()
+# print(board.place_letters(['Q(2)', 'U(1)', 'E(1)', 'U(1)', 'E(4)', 'Y(4)', 'G(2)'], "QUEUE", "H8", "H"))
+# print(board)
+# print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'I(1)', 'H(4)', 'Y(4)', 'G(2)'], "HGRYI", "H8", "V"))
+# print(board)
+# print(board.place_letters(['D(2)', 'O(1)', 'R(1)', 'E(28)', 'H(4)', 'Y(4)', 'G(2)'], "ORE", "I8", "V"))
+# print(board)
