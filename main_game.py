@@ -5,6 +5,7 @@ def create_players():
     player_list = []
     player_count = int(input("How many players are playing? "))
     for i in range(player_count):
+        #make player
         player = Player()
         input_name = input(f"Name of player {i+1}: ")
         player.name = input_name
@@ -13,11 +14,20 @@ def create_players():
         
 
 def main():
+    #make players
     player_list = create_players()
-    for i in len(player_list):
-        pass
+    #make bag
+    bag = Bag()
+    end = True
+    while end == True:
+        for player in player_list:
+            #draw letters
+            player.hand = bag.draw_letters(player.hand)
+        print()
 
-    print(player_list)
+
+
+
 
 
 
