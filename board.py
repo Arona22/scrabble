@@ -58,7 +58,7 @@ class Board:
     def _check_for_word_vertical(self, row, col, letter_row, letter):
         word = ""
         while self.board[row][col] not in self.board_constants:
-            word += self.board[row][col] 
+            word += self.board[row][col][0]
             row += 1
             if row == letter_row:
                 word += letter
@@ -68,7 +68,7 @@ class Board:
     def _check_for_word_horizontal(self, row, col, letter_col, letter):
         word = ""
         while self.board[row][col] not in self.board_constants:
-            word += self.board[row][col] 
+            word += self.board[row][col][0] 
             col += 1
             if col == letter_col:
                 word += letter
@@ -77,28 +77,27 @@ class Board:
 
 
     def place_letters(self, player, word, start_col, start_row, direction):
-        new_word = ""
-        if direction == "H":
-            while self.board[start_row][start_col - 1] not in self.board_constants:
-                start_col -= 1
-                new_word += self.board[start_row][start_col]
-            new_word += word
-            end_col = start_col
-            while self.board[start_row][end_col + 1] not in self.board_constants:
-                end_col += 1
-                new_word += self.board[start_row][end_col]
+        # new_word = ""
+        # if direction == "H":
+        #     while self.board[start_row][start_col - 1] not in self.board_constants:
+        #         start_col -= 1
+        #         new_word += self.board[start_row][start_col]
+        #     new_word += word
+        #     end_col = start_col
+        #     while self.board[start_row][end_col + 1] not in self.board_constants:
+        #         end_col += 1
 
-        if direction == "V":
-            while self.board[start_row - 1][start_col] not in self.board_constants:
-                start_row -= 1
-                new_word += self.board[start_row][start_col]
-            new_word += word
-            end_row = start_row
-            while self.board[end_row][start_col + 1] not in self.board_constants:
-                end_row += 1
-                new_word += self.board[end_row][start_col]
+        # if direction == "V":
+        #     while self.board[start_row - 1][start_col] not in self.board_constants:
+        #         start_row -= 1
+        #         new_word += self.board[start_row][start_col]
+        #     new_word += word
+        #     end_row = start_row
+        #     while self.board[end_row][start_col + 1] not in self.board_constants:
+        #         end_row += 1
+        #         new_word += self.board[end_row][start_col]
 
-        word = new_word
+        # word = new_word
         hand_letters = [letter[0] for letter in player.hand]
         used_letters = []
         made_words = [word]
@@ -151,8 +150,8 @@ class Board:
                 return "Word does not fit in chosen position, try again!"
         
 
-        check_words = self._search_dictionary(made_words) is not None
-        if check_words is False:
+        check_words = self._search_dictionary(made_words)
+        if check_words is not None:
              print(check_words)
              return
         
