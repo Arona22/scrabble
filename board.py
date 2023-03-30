@@ -81,7 +81,7 @@ class Board:
         if direction == "H":
             while self.board[start_row][start_col - 1] not in self.board_constants:
                 start_col -= 1
-            new_word += self.board[start_row][start_col]
+                new_word += self.board[start_row][start_col]
             new_word += word
             end_col = start_col
             while self.board[start_row][end_col + 1] not in self.board_constants:
@@ -91,7 +91,7 @@ class Board:
         if direction == "V":
             while self.board[start_row - 1][start_col] not in self.board_constants:
                 start_row -= 1
-            new_word += self.board[start_row][start_col]
+                new_word += self.board[start_row][start_col]
             new_word += word
             end_row = start_row
             while self.board[end_row][start_col + 1] not in self.board_constants:
@@ -152,7 +152,7 @@ class Board:
         
 
         check_words = self._search_dictionary(made_words) is not None
-        if check_words is not None:
+        if check_words is False:
              print(check_words)
              return
         
