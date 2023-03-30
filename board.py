@@ -133,7 +133,8 @@ class Board:
                         new_start -= 1
                         curr_pos = self.board[new_start][start_col + i]
                     new_word = self._check_for_word_vertical(new_start, start_col, start_row, word[i])
-                else:
+
+                if direction == "V":
                     while curr_pos not in self.board_constants:
                         new_start -= 1
                         curr_pos = self.board[start_row + i][new_start]
@@ -146,6 +147,7 @@ class Board:
                         if letter == word[i] and letter_in:
                             continue
                         letters_scored.append(letter)
+                    connects = True
 
             # if you are connecting to a letter
             elif curr_pos != f"{word[i]}({self.points_for_letter[word[i]]})":
@@ -154,7 +156,7 @@ class Board:
             elif curr_pos == f"{word[i]}({self.points_for_letter[word[i]]})":
                 connects = True
         
-        if not connects:
+        if not connects and self.board[7][7] != "#":
             return "word has to be connected to the base, try again!"
 
         check_words = self._search_dictionary(made_words)
