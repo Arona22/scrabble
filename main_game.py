@@ -47,6 +47,9 @@ def options(board, bag, player, pass_counter):
 
             #calculate score if answer was valid
             if type(answer) == list:
+                if len(word) >= 7:
+                    player.score += 50
+                    
                 cal_score(player, answer, bag.points_for_letter)
 
             if answer is None:
@@ -120,7 +123,7 @@ def main():
             if bag.letters_in_bag == [] and player.hand == []:
                 print()
                 print()
-                print(f"Game Over! {player.name} won!")
+                print(f"Game Over! {player.name} won! Score: {player.score}")
                 return
             
             #draw letters
