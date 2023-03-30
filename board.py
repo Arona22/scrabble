@@ -111,11 +111,12 @@ class Board:
             if curr_pos == "DL":
                 letters_scored.append(word[i])
             if curr_pos == "TL":
-                letters_scored.append(word[i] * 2)
+                for _ in range(2):
+                    letters_scored.append(word[i])
             if curr_pos == "DW":
                 for letter in word:
                     letters_scored.append(letter)
-            if curr_pos == "TL":
+            if curr_pos == "TW":
                 for _ in range(2):
                     for letter in word:
                         letters_scored.append(letter)
@@ -129,12 +130,14 @@ class Board:
                 
                 # check if you made any words on the go
                 if direction == "H":
+                    curr_pos = self.board[new_start][start_col + i]
                     while curr_pos not in self.board_constants:
                         new_start -= 1
                         curr_pos = self.board[new_start][start_col + i]
                     new_word = self._check_for_word_vertical(new_start, start_col, start_row, word[i])
 
                 if direction == "V":
+                    curr_pos = curr_pos = self.board[start_row + i][new_start]
                     while curr_pos not in self.board_constants:
                         new_start -= 1
                         curr_pos = self.board[start_row + i][new_start]
