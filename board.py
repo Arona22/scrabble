@@ -2,6 +2,7 @@ from bag import Bag
 
 class Board:
     def __init__(self) -> None:
+        ''' Basics for the board '''
         self.size = 15
         self.board = [[None] * self.size for _ in range(self.size)]
         self.board_constants = ["DL", "DW", "TL", "TW", "#", None]
@@ -9,6 +10,7 @@ class Board:
         self._add_constants()
 
     def _add_constants(self):
+        ''' Add the constants to the board '''
         for row in range(self.size):
             for col in range(self.size):
                 if row == col or row + col == self.size - 1:
@@ -53,9 +55,11 @@ class Board:
         self.board[7][7] = "#"
 
     def open_dict(self):
+        ''' opens the txt file with all the words '''
         return open("Collins Scrabble Words (2019) with definitions-1.txt", "r")
     
     def _check_for_word_vertical(self, row, col, letter_row, letter):
+        ''' Returns the word made from the chosen word vertically '''
         word = ""
         while self.board[row][col] not in self.board_constants:
             word += self.board[row][col][0]
@@ -66,6 +70,7 @@ class Board:
         return word
     
     def _check_for_word_horizontal(self, row, col, letter_col, letter):
+        ''' Returns the word made from the chosen word horizontally '''
         word = ""
         while self.board[row][col] not in self.board_constants:
             word += self.board[row][col][0] 
@@ -77,32 +82,14 @@ class Board:
 
 
     def place_letters(self, player, word, start_col, start_row, direction):
-        # new_word = ""
-        # if direction == "H":
-        #     while self.board[start_row][start_col - 1] not in self.board_constants:
-        #         start_col -= 1
-        #         new_word += self.board[start_row][start_col]
-        #     new_word += word
-        #     end_col = start_col
-        #     while self.board[start_row][end_col + 1] not in self.board_constants:
-        #         end_col += 1
-
-        # if direction == "V":
-        #     while self.board[start_row - 1][start_col] not in self.board_constants:
-        #         start_row -= 1
-        #         new_word += self.board[start_row][start_col]
-        #     new_word += word
-        #     end_row = start_row
-        #     while self.board[end_row][start_col + 1] not in self.board_constants:
-        #         end_row += 1
-        #         new_word += self.board[end_row][start_col]
-
-        # word = new_word
+        ''' Check if the words formed are valid and adds them to the board '''
         hand_letters = [letter[0] for letter in player.hand]
         used_letters = []
         made_words = [word]
         letters_scored = []
+        connects = False
 
+        # Make sure that the first word is set on the #
         if self.board[7][7] == "#":
             if direction == "H" and (start_row != 7 or start_col + len(word) <= 7):
                 return "First word of game must be on the '#'"
@@ -112,6 +99,7 @@ class Board:
         for i in range(len(word)):
             letters_scored.append(word[i])
 
+            # Go down if V or to the right if H
             if direction == "H":
                 new_start = start_row - 1
                 curr_pos = self.board[start_row][start_col + i]
@@ -119,13 +107,27 @@ class Board:
                 new_start = start_col - 1
                 curr_pos = self.board[start_row + i][start_col]
 
+            # Add multication
+            if curr_pos == "DL":
+                letters_scored.append(word[i])
+            if curr_pos == "TL":
+                letters_scored.append(word[i] * 2)
+            if curr_pos == "DW":
+                for letter in word:
+                    letters_scored.append(letter)
+            if curr_pos == "TL":
+                for _ in range(2):
+                    for letter in word:
+                        letters_scored.append(letter)
 
+            # test for if you chose a letter that should be on hand
             if curr_pos in self.board_constants:
                 if word[i] not in hand_letters:
                     return "You do not have the right letters for this word, try again!"
                 hand_letters.remove(word[i])
                 used_letters.append(word[i])
-
+                
+                # check if you made any words on the go
                 if direction == "H":
                     while curr_pos not in self.board_constants:
                         new_start -= 1
@@ -145,10 +147,15 @@ class Board:
                             continue
                         letters_scored.append(letter)
 
-
+            # if you are connecting to a letter
             elif curr_pos != f"{word[i]}({self.points_for_letter[word[i]]})":
                 return "Word does not fit in chosen position, try again!"
+            
+            elif curr_pos == f"{word[i]}({self.points_for_letter[word[i]]})":
+                connects = True
         
+        if not connects:
+            return "word has to be connected to the base, try again!"
 
         check_words = self._search_dictionary(made_words)
         if check_words is not None:
