@@ -58,14 +58,14 @@ def options(board, bag, player, pass_counter):
         pass_counter += 1
         return pass_counter, None
 
-def cal_score(player, word, dict):
+def cal_score(player, word, bag):
     if word is None:
         return
     total_score = 0
     for tile in word:
-        for sta in dict:
+        for sta in bag:
             if tile == sta:
-                total_score += int(dict[sta])
+                total_score += int(bag[sta])
 
     player.score = total_score
 
