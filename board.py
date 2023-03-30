@@ -4,7 +4,7 @@ class Board:
     def __init__(self) -> None:
         self.size = 15
         self.board = [[None] * self.size for _ in range(self.size)]
-        self.board_constants = ["DL", "DW", "TL", "TW", "#"]
+        self.board_constants = ["DL", "DW", "TL", "TW", "#", None]
         self.points_for_letter = Bag().points_for_letter
         self._add_constants()
 
@@ -54,10 +54,55 @@ class Board:
 
     def open_dict(self):
         return open("Collins Scrabble Words (2019) with definitions-1.txt", "r")
+    
+    def _check_for_word_vertical(self, row, col, letter_row, letter):
+        word = ""
+        while self.board[row][col] not in self.board_constants:
+            word += self.board[row][col] 
+            row += 1
+            if row == letter_row:
+                word += letter
+                row += 1
+        return word
+    
+    def _check_for_word_horizontal(self, row, col, letter_col, letter):
+        word = ""
+        while self.board[row][col] not in self.board_constants:
+            word += self.board[row][col] 
+            col += 1
+            if col == letter_col:
+                word += letter
+                col += 1
+        return word
+
 
     def place_letters(self, player, word, start_col, start_row, direction):
+        new_word = ""
+        if direction == "H":
+            while self.board[start_row][start_col - 1] not in self.board_constants:
+                start_col -= 1
+                new_word += self.board[start_row][start_col]
+            new_word += word
+            end_col = start_col
+            while self.board[start_row][end_col + 1] not in self.board_constants:
+                end_col += 1
+                new_word += self.board[start_row][end_col]
+
+        if direction == "V":
+            while self.board[start_row - 1][start_col] not in self.board_constants:
+                start_row -= 1
+                new_word += self.board[start_row][start_col]
+            new_word += word
+            end_row = start_row
+            while self.board[end_row][start_col + 1] not in self.board_constants:
+                end_row += 1
+                new_word += self.board[end_row][start_col]
+
+        word = new_word
         hand_letters = [letter[0] for letter in player.hand]
         used_letters = []
+        made_words = [word]
+        letters_scored = []
 
         if self.board[7][7] == "#":
             if direction == "H" and (start_row != 7 or start_col + len(word) <= 7):
@@ -66,41 +111,75 @@ class Board:
                 return "First word of game must be on the '#'"
             
         for i in range(len(word)):
+            letters_scored.append(word[i])
+
             if direction == "H":
+                new_start = start_row - 1
                 curr_pos = self.board[start_row][start_col + i]
-            elif direction == "V":
+            else:
+                new_start = start_col - 1
                 curr_pos = self.board[start_row + i][start_col]
 
-            if curr_pos is None or curr_pos in self.board_constants:
+
+            if curr_pos in self.board_constants:
                 if word[i] not in hand_letters:
                     return "You do not have the right letters for this word, try again!"
+                hand_letters.remove(word[i])
+                used_letters.append(word[i])
+
+                if direction == "H":
+                    while curr_pos not in self.board_constants:
+                        new_start -= 1
+                        curr_pos = self.board[new_start][start_col + i]
+                    new_word = self._check_for_word_vertical(new_start, start_col, start_row, word[i])
                 else:
-                    used_letters.append(word[i])
-            
-            if curr_pos is not None and curr_pos not in self.board_constants and curr_pos != f"{word[i]}({self.points_for_letter[word[i]]})":
+                    while curr_pos not in self.board_constants:
+                        new_start -= 1
+                        curr_pos = self.board[start_row + i][new_start]
+                    new_word = self._check_for_word_horizontal(start_row, new_start, start_col, word[i])
+                
+                if len(new_word) > 1:
+                    made_words.append(new_word)
+                    letter_in = True
+                    for letter in new_word:
+                        if letter == word[i] and letter_in:
+                            continue
+                        letters_scored.append(letter)
+
+
+            elif curr_pos != f"{word[i]}({self.points_for_letter[word[i]]})":
                 return "Word does not fit in chosen position, try again!"
         
-        invalid_word = True 
-        dictionary = self.open_dict()
-        for line in dictionary:
-            if line.split("\t")[0] == word:
-                invalid_word = False
-        dictionary.close()
+
+        check_words = self._search_dictionary(made_words) is not None
+        if check_words is not None:
+             print(check_words)
+             return
         
-        if invalid_word:
-            return f"{word} is not in dictionary. Turn forfeited"
-        
+        self._add_to_board(word, start_col, start_row, direction)
+        for letter in used_letters:
+            player.delete_item_in_hand(letter)
+
+        return letters_scored
+
+    def _search_dictionary(self, made_words):
+        for made_word in made_words:
+            invalid_word = True 
+            dictionary = self.open_dict()
+            for line in dictionary:
+                if line.split("\t")[0] == made_word:
+                    invalid_word = False
+            dictionary.close()
+
+            if invalid_word:
+                return f"{made_word} is not in dictionary. Turn forfeited"
+
+    def _add_to_board(self, word, start_col, start_row, direction):
         for i in range(len(word)):
             if direction == "H":
                 self.board[start_row][start_col + i] = f"{word[i]}({self.points_for_letter[word[i]]})"
             else:
                 self.board[start_row + i][start_col] = f"{word[i]}({self.points_for_letter[word[i]]})"
-
-        for letter in used_letters:
-            player.delete_item_in_hand(letter)
-
-    def calculate_score(self, letter_pos, direction):
-        pass
 
     def __str__(self) -> str:
         counter = 1
