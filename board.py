@@ -101,10 +101,8 @@ class Board:
 
             # Go down if V or to the right if H
             if direction == "H":
-                new_start = start_row - 1
                 curr_pos = self.board[start_row][start_col + i]
             else:
-                new_start = start_col - 1
                 curr_pos = self.board[start_row + i][start_col]
 
             # Add multication
@@ -130,17 +128,15 @@ class Board:
                 
                 # check if you made any words on the go
                 if direction == "H":
-                    curr_pos = self.board[new_start][start_col + i]
-                    while curr_pos not in self.board_constants:
+                    new_start = start_row
+                    while self.board[new_start - 1][start_col + i] not in self.board_constants:
                         new_start -= 1
-                        curr_pos = self.board[new_start][start_col + i]
                     new_word = self._check_for_word_vertical(new_start, start_col, start_row, word[i])
 
                 if direction == "V":
-                    curr_pos = curr_pos = self.board[start_row + i][new_start]
-                    while curr_pos not in self.board_constants:
+                    new_start = start_col
+                    while self.board[start_row + i][new_start - 1] not in self.board_constants:
                         new_start -= 1
-                        curr_pos = self.board[start_row + i][new_start]
                     new_word = self._check_for_word_horizontal(start_row, new_start, start_col, word[i])
                 
                 if len(new_word) > 1:
@@ -149,7 +145,6 @@ class Board:
                     for letter in new_word:
                         if letter == word[i] and letter_in:
                             continue
-                        letters_scored.append(letter)
                     connects = True
 
             # if you are connecting to a letter
