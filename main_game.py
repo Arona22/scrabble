@@ -82,7 +82,7 @@ def cal_score(player, letters, bag):
             if letter == let:
                 total_score += int(bag[let])
 
-    player.score = total_score
+    player.score += total_score
 
 def main():
     ''' Main game loop '''
