@@ -4,6 +4,7 @@ from board import Board
 
 
 def create_players():
+    ''' creates players '''
     while True:
         player_list = []
         player_count = int(input("How many players are playing? "))
@@ -21,6 +22,7 @@ def create_players():
         return player_list        
 
 def options(board, bag, player, pass_counter):
+    ''' choose option for round '''
 
     print(f"{player.name}'s turn!")
     player.print_score()
@@ -106,7 +108,7 @@ def main():
     #make board
     board = Board()
 
-    #how many titurn players have passed
+    #how many turns players have passed in a row
     pass_counter = 0
     while True:
 

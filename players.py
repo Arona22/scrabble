@@ -11,12 +11,14 @@ class Player:
         print(f"Score: {self.score}")
 
     def _find_item_in_hand(self, letter):
+        ''' finds the whole item with number '''
         for i in letter:
             for j in self.hand:
                 if j[0] == i:
                     return j
 
     def delete_item_in_hand(self, letter):
+        ''' Deletes the item found '''
         letter = self._find_item_in_hand(letter)
         self.hand.remove(letter)
 

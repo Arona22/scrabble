@@ -18,6 +18,7 @@ class Bag:
                 self.letters_in_bag.remove(letter)
 
     def swap(self, hand, let):
+        ''' Swap out the letters chosen and put new in '''
         for i in let:
             for j in hand:
                 if j[0] == i:
