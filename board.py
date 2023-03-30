@@ -156,6 +156,7 @@ class Board:
             elif curr_pos == f"{word[i]}({self.points_for_letter[word[i]]})":
                 connects = True
         
+
         if not connects and self.board[7][7] != "#":
             return "word has to be connected to the base, try again!"
 
@@ -168,9 +169,11 @@ class Board:
         for letter in used_letters:
             player.delete_item_in_hand(letter)
 
+        # return the letters that you should get points for
         return letters_scored
 
     def _search_dictionary(self, made_words):
+        ''' Check if all the words formed are in the dictionary '''
         for made_word in made_words:
             invalid_word = True 
             dictionary = self.open_dict()
@@ -183,6 +186,7 @@ class Board:
                 return f"{made_word} is not in dictionary. Turn forfeited"
 
     def _add_to_board(self, word, start_col, start_row, direction):
+        ''' adds the letters to the board '''
         for i in range(len(word)):
             if direction == "H":
                 self.board[start_row][start_col + i] = f"{word[i]}({self.points_for_letter[word[i]]})"
@@ -190,6 +194,7 @@ class Board:
                 self.board[start_row + i][start_col] = f"{word[i]}({self.points_for_letter[word[i]]})"
 
     def __str__(self) -> str:
+        ''' return the board '''
         counter = 1
         return_string = "       A      B      C      D      E      F      G      H      I      J      K      L      M      N      O\n"
         return_string += "    " + "=" * 105 + "\n"
