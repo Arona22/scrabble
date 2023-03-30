@@ -81,22 +81,22 @@ class Board:
         if direction == "H":
             while self.board[start_row][start_col - 1] not in self.board_constants:
                 start_col -= 1
-                new_word += self.board[start_row][start_col]
+            new_word += self.board[start_row][start_col]
             new_word += word
             end_col = start_col
             while self.board[start_row][end_col + 1] not in self.board_constants:
                 end_col += 1
-            new_word += self.board[start_row][end_col]
+                new_word += self.board[start_row][end_col]
 
         if direction == "V":
             while self.board[start_row - 1][start_col] not in self.board_constants:
                 start_row -= 1
-                new_word += self.board[start_row][start_col]
+            new_word += self.board[start_row][start_col]
             new_word += word
             end_row = start_row
             while self.board[end_row][start_col + 1] not in self.board_constants:
                 end_row += 1
-            new_word += self.board[end_row][start_col]
+                new_word += self.board[end_row][start_col]
 
         word = new_word
         hand_letters = [letter[0] for letter in player.hand]
