@@ -28,10 +28,20 @@ def options(board, bag, player, pass_counter):
     print("2. Swap letters")
     print("3. Pass your turn")
     player.print_hand()
-    opt = input("CHOOSE MOVE: ")
+
+    while True:
+        #try valid choice
+        try:    
+            opt = int(input("CHOOSE MOVE: "))
+            if opt > 0 and opt < 4:
+                break
+        except:
+            pass
+        print("Invalid choice!")
+        
             
     #play word option
-    if opt == "1":
+    if opt == 1:
         answer = ""
         while type(answer) != list:
             word = input("Word: ").upper()
@@ -64,14 +74,14 @@ def options(board, bag, player, pass_counter):
         return pass_counter
 
     #swap option
-    elif opt == "2":
+    elif opt == 2:
         let_swap = input("What letters to swap? (e.x: AFSAS) ").upper()
         bag.swap(player.hand, let_swap)
         pass_counter = 0
         return pass_counter
 
     #pass option
-    elif opt == "3":
+    elif opt == 3:
         pass_counter += 1
         return pass_counter
 
@@ -133,10 +143,6 @@ def main():
             pass_counter = options(board, bag, player, pass_counter)
             
 
-            
-
-
-
-
+        
 if __name__ == "__main__":
     main()
