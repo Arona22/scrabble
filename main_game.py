@@ -49,10 +49,10 @@ def options(board, bag, player, pass_counter):
             if type(answer) == list:
                 cal_score(player, answer, bag.points_for_letter)
 
+            if answer is None:
+                break
             if type(answer) == str:
                 print(answer)
-            if answer == f"{word} is not in dictionary. Turn forfeited":
-                break
 
         #Refill hand
         bag.draw_letters(player.hand)
