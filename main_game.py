@@ -35,7 +35,7 @@ def options(board, bag, player, pass_counter):
         answer = ""
         while type(answer) != list:
             word = input("Word: ").upper()
-            pos = input("Position to place word: (e.x: h8)").upper()
+            pos = input("Position to place word (e.x: h8): ").upper()
             direction = input("Horizontal or Vertical (h/v): ").upper()
 
             #change pos=c10 to (e.x: 2,3)
