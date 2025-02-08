@@ -1,10 +1,12 @@
 # Scrabble
 
+A Python-based Scrabble game implementation.
 Play a game of scrabble.
 UI is terminal only.
 
-## **The board**
-![Board](scrabble board.png)
+## **Game Board Preview**
+![Scrabble Board](scrabble%20board.png)
 
-## **Play a word**
-![Word](play word.png)
+## **Word Placement Preview**
+![Play Word](play%20word.png)
+
